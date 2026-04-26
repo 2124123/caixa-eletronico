@@ -1,146 +1,368 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Caixa Eletrônico</title>
+  <meta charset="UTF-8">
+  <title>Caixa Eletrônico</title>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
+    body {
+      font-family: 'IBM Plex Sans', sans-serif;
+      background: linear-gradient(135deg, #0B1F3A 0%, #102a4c 50%, #0f3460 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 2rem 1rem;
+    }
 
-        .caixa {
-            background: white;
-            width: 360px;
-            padding: 25px;
-            border-radius: 15px;
-            text-align: center;
-            box-shadow: 0 0 20px rgba(0,0,0,0.4);
-        }
+    .atm-card {
+      background: #ffffff;
+      width: 100%;
+      max-width: 440px;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+    }
 
-        h1 {
-            color: #203a43;
-        }
+    .atm-header {
+      background: #0B1F3A;
+      padding: 1.25rem 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
 
-        .saldo {
-            background: #e8f5e9;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 22px;
-            margin: 20px 0;
-            color: #1b5e20;
-        }
+    .atm-logo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #00D4AA;
+      flex-shrink: 0;
+    }
 
-        input {
-            width: 90%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 8px;
-            border: 1px solid #ccc;
-        }
+    .atm-header-text {
+      color: #ffffff;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
 
-        button {
-            width: 95%;
-            padding: 12px;
-            margin: 6px 0;
-            border: none;
-            border-radius: 8px;
-            background: #203a43;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
+    .atm-header-sub {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 11px;
+      margin-left: auto;
+      font-family: 'IBM Plex Mono', monospace;
+    }
 
-        button:hover {
-            background: #2c5364;
-        }
+    .atm-body {
+      padding: 1.75rem 1.5rem;
+    }
 
-        .mensagem {
-            margin-top: 15px;
-            font-weight: bold;
-            color: #333;
-        }
-    </style>
+    .atm-balance-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .atm-balance-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 1.75rem;
+    }
+
+    .atm-currency {
+      font-size: 15px;
+      font-weight: 500;
+      color: #888;
+    }
+
+    .atm-balance-num {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 40px;
+      font-weight: 600;
+      color: #0B1F3A;
+      letter-spacing: -0.02em;
+    }
+
+    .atm-divider {
+      height: 1px;
+      background: #f0f0f0;
+      margin: 0 0 1.5rem;
+    }
+
+    .atm-input-label {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 6px;
+    }
+
+    .atm-input-wrap {
+      position: relative;
+      margin-bottom: 1rem;
+    }
+
+    .atm-input-prefix {
+      position: absolute;
+      left: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 13px;
+      color: #888;
+      font-family: 'IBM Plex Mono', monospace;
+      pointer-events: none;
+    }
+
+    .atm-input {
+      width: 100%;
+      padding: 11px 14px 11px 34px;
+      font-size: 15px;
+      font-family: 'IBM Plex Mono', monospace;
+      background: #f8f9fb;
+      border: 1px solid #e2e5ea;
+      border-radius: 8px;
+      color: #0B1F3A;
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s;
+    }
+
+    .atm-input:focus {
+      border-color: #00D4AA;
+      box-shadow: 0 0 0 3px rgba(0, 212, 170, 0.15);
+    }
+
+    .atm-btn-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 1.25rem;
+    }
+
+    .atm-btn {
+      padding: 11px 4px;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      border: 1px solid #e2e5ea;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #f8f9fb;
+      color: #0B1F3A;
+      font-family: 'IBM Plex Sans', sans-serif;
+    }
+
+    .atm-btn:hover {
+      background: #eef0f4;
+      border-color: #c8cdd6;
+    }
+
+    .atm-btn:active {
+      transform: scale(0.97);
+    }
+
+    .atm-msg {
+      font-size: 13px;
+      padding: 11px 14px;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 500;
+      min-height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+
+    .msg-idle {
+      background: #f8f9fb;
+      color: #888;
+      border: 1px solid #e2e5ea;
+    }
+
+    .msg-success {
+      background: #edfaf5;
+      color: #0a7a56;
+      border: 1px solid #9de8cc;
+    }
+
+    .msg-error {
+      background: #fef2f2;
+      color: #b91c1c;
+      border: 1px solid #fca5a5;
+    }
+
+    .atm-history {
+      margin-top: 1.5rem;
+    }
+
+    .atm-history-title {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #888;
+      margin-bottom: 8px;
+    }
+
+    .atm-tx {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .atm-tx:last-child {
+      border-bottom: none;
+    }
+
+    .atm-tx-type {
+      font-size: 13px;
+      color: #0B1F3A;
+    }
+
+    .atm-tx-time {
+      font-size: 11px;
+      color: #aaa;
+      margin-top: 2px;
+    }
+
+    .atm-tx-val {
+      font-family: 'IBM Plex Mono', monospace;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .tx-in  { color: #0a7a56; }
+    .tx-out { color: #b91c1c; }
+  </style>
 </head>
 <body>
 
-    <div class="caixa">
-        <h1>Caixa Eletrônico</h1>
-
-        <div class="saldo">
-            Saldo: R$ <span id="saldo">1000.00</span>
-        </div>
-
-        <input type="number" id="valor" placeholder="Digite o valor">
-
-        <button onclick="depositar()">Depositar</button>
-        <button onclick="sacar()">Sacar</button>
-        <button onclick="transferir()">Transferir</button>
-
-        <p class="mensagem" id="mensagem"></p>
+  <div class="atm-card">
+    <div class="atm-header">
+      <div class="atm-logo-dot"></div>
+      <span class="atm-header-text">Banco Digital</span>
+      <span class="atm-header-sub">●●●● 4821</span>
     </div>
 
-    <script>
-        let saldo = 1000;
+    <div class="atm-body">
+      <div class="atm-balance-label">Saldo disponível</div>
+      <div class="atm-balance-row">
+        <span class="atm-currency">R$</span>
+        <span class="atm-balance-num" id="saldo">1.000,00</span>
+      </div>
 
-        function atualizarSaldo() {
-            document.getElementById("saldo").innerText = saldo.toFixed(2);
-        }
+      <div class="atm-divider"></div>
 
-        function pegarValor() {
-            return Number(document.getElementById("valor").value);
-        }
+      <div class="atm-input-label">Valor da operação</div>
+      <div class="atm-input-wrap">
+        <span class="atm-input-prefix">R$</span>
+        <input class="atm-input" type="number" id="valor" placeholder="0,00" min="0" step="0.01">
+      </div>
 
-        function mostrarMensagem(texto) {
-            document.getElementById("mensagem").innerText = texto;
-        }
+      <div class="atm-btn-grid">
+        <button class="atm-btn" onclick="depositar()">Depositar</button>
+        <button class="atm-btn" onclick="sacar()">Sacar</button>
+        <button class="atm-btn" onclick="transferir()">Transferir</button>
+      </div>
 
-        function depositar() {
-            let valor = pegarValor();
+      <div class="atm-msg msg-idle" id="mensagem">Aguardando operação...</div>
 
-            if (valor <= 0) {
-                mostrarMensagem("Digite um valor válido!");
-            } else {
-                saldo += valor;
-                atualizarSaldo();
-                mostrarMensagem("Depósito realizado com sucesso!");
-            }
-        }
+      <div class="atm-history">
+        <div class="atm-history-title">Últimas operações</div>
+        <div id="historico"></div>
+      </div>
+    </div>
+  </div>
 
-        function sacar() {
-            let valor = pegarValor();
+  <script>
+    let saldo = 1000;
+    const historico = [];
 
-            if (valor <= 0) {
-                mostrarMensagem("Digite um valor válido!");
-            } else if (valor > saldo) {
-                mostrarMensagem("Saldo insuficiente!");
-            } else {
-                saldo -= valor;
-                atualizarSaldo();
-                mostrarMensagem("Saque realizado com sucesso!");
-            }
-        }
+    function formatBR(val) {
+      return val.toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+    }
 
-        function transferir() {
-            let valor = pegarValor();
+    function atualizarSaldo() {
+      document.getElementById('saldo').innerText = formatBR(saldo);
+    }
 
-            if (valor <= 0) {
-                mostrarMensagem("Digite um valor válido!");
-            } else if (valor > saldo) {
-                mostrarMensagem("Saldo insuficiente!");
-            } else {
-                saldo -= valor;
-                atualizarSaldo();
-                mostrarMensagem("Transferência realizada com sucesso!");
-            }
-        }
-    </script>
+    function pegarValor() {
+      return parseFloat(document.getElementById('valor').value);
+    }
+
+    function mostrarMensagem(texto, tipo) {
+      const el = document.getElementById('mensagem');
+      el.className = 'atm-msg ' + (tipo === 'ok' ? 'msg-success' : tipo === 'err' ? 'msg-error' : 'msg-idle');
+      el.innerText = texto;
+    }
+
+    function agora() {
+      return new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    function addHistorico(tipo, valor) {
+      historico.unshift({ tipo, valor, hora: agora() });
+      if (historico.length > 4) historico.pop();
+      const labels = { deposito: 'Depósito', saque: 'Saque', transferencia: 'Transferência' };
+      const signs  = { deposito: '+', saque: '-', transferencia: '-' };
+      const cls    = { deposito: 'tx-in', saque: 'tx-out', transferencia: 'tx-out' };
+      document.getElementById('historico').innerHTML = historico.map(tx =>
+        `<div class="atm-tx">
+          <div>
+            <div class="atm-tx-type">${labels[tx.tipo]}</div>
+            <div class="atm-tx-time">${tx.hora}</div>
+          </div>
+          <span class="atm-tx-val ${cls[tx.tipo]}">${signs[tx.tipo]} R$ ${formatBR(tx.valor)}</span>
+        </div>`
+      ).join('');
+    }
+
+    function depositar() {
+      const valor = pegarValor();
+      if (!valor || valor <= 0) { mostrarMensagem('Digite um valor válido.', 'err'); return; }
+      saldo += valor;
+      atualizarSaldo();
+      addHistorico('deposito', valor);
+      mostrarMensagem(`Depósito de R$ ${formatBR(valor)} realizado com sucesso.`, 'ok');
+      document.getElementById('valor').value = '';
+    }
+
+    function sacar() {
+      const valor = pegarValor();
+      if (!valor || valor <= 0) { mostrarMensagem('Digite um valor válido.', 'err'); return; }
+      if (valor > saldo) { mostrarMensagem('Saldo insuficiente para o saque.', 'err'); return; }
+      saldo -= valor;
+      atualizarSaldo();
+      addHistorico('saque', valor);
+      mostrarMensagem(`Saque de R$ ${formatBR(valor)} realizado com sucesso.`, 'ok');
+      document.getElementById('valor').value = '';
+    }
+
+    function transferir() {
+      const valor = pegarValor();
+      if (!valor || valor <= 0) { mostrarMensagem('Digite um valor válido.', 'err'); return; }
+      if (valor > saldo) { mostrarMensagem('Saldo insuficiente para transferência.', 'err'); return; }
+      saldo -= valor;
+      atualizarSaldo();
+      addHistorico('transferencia', valor);
+      mostrarMensagem(`Transferência de R$ ${formatBR(valor)} realizada com sucesso.`, 'ok');
+      document.getElementById('valor').value = '';
+    }
+  </script>
 
 </body>
 </html>
+
