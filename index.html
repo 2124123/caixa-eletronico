@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Caixa Eletrônico</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .caixa {
+            background: white;
+            width: 360px;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0,0,0,0.4);
+        }
+
+        h1 {
+            color: #203a43;
+        }
+
+        .saldo {
+            background: #e8f5e9;
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 22px;
+            margin: 20px 0;
+            color: #1b5e20;
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            width: 95%;
+            padding: 12px;
+            margin: 6px 0;
+            border: none;
+            border-radius: 8px;
+            background: #203a43;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2c5364;
+        }
+
+        .mensagem {
+            margin-top: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="caixa">
+        <h1>Caixa Eletrônico</h1>
+
+        <div class="saldo">
+            Saldo: R$ <span id="saldo">1000.00</span>
+        </div>
+
+        <input type="number" id="valor" placeholder="Digite o valor">
+
+        <button onclick="depositar()">Depositar</button>
+        <button onclick="sacar()">Sacar</button>
+        <button onclick="transferir()">Transferir</button>
+
+        <p class="mensagem" id="mensagem"></p>
+    </div>
+
+    <script>
+        let saldo = 1000;
+
+        function atualizarSaldo() {
+            document.getElementById("saldo").innerText = saldo.toFixed(2);
+        }
+
+        function pegarValor() {
+            return Number(document.getElementById("valor").value);
+        }
+
+        function mostrarMensagem(texto) {
+            document.getElementById("mensagem").innerText = texto;
+        }
+
+        function depositar() {
+            let valor = pegarValor();
+
+            if (valor <= 0) {
+                mostrarMensagem("Digite um valor válido!");
+            } else {
+                saldo += valor;
+                atualizarSaldo();
+                mostrarMensagem("Depósito realizado com sucesso!");
+            }
+        }
+
+        function sacar() {
+            let valor = pegarValor();
+
+            if (valor <= 0) {
+                mostrarMensagem("Digite um valor válido!");
+            } else if (valor > saldo) {
+                mostrarMensagem("Saldo insuficiente!");
+            } else {
+                saldo -= valor;
+                atualizarSaldo();
+                mostrarMensagem("Saque realizado com sucesso!");
+            }
+        }
+
+        function transferir() {
+            let valor = pegarValor();
+
+            if (valor <= 0) {
+                mostrarMensagem("Digite um valor válido!");
+            } else if (valor > saldo) {
+                mostrarMensagem("Saldo insuficiente!");
+            } else {
+                saldo -= valor;
+                atualizarSaldo();
+                mostrarMensagem("Transferência realizada com sucesso!");
+            }
+        }
+    </script>
+
+</body>
+</html>
